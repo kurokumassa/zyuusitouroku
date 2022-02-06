@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>授精入力</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
+</head>
+<body>
+
+    <form class="w-75 mx-auto">
+        <p class="mt-3">授精日</p>
+        <div>
+            <input type="date" class="form-control w-100 mt-1" name="day" placeholder="" required>
+
+        </div>
+        <p class="mt-3">注入した雌畜の10桁耳標</p>
+        <div>
+            <input class="form-control w-100 mt-1" name="no10" placeholder="1234567890 半角数字を連続で入力" required>
+        </div>
+        <p class="mt-3">種雄牛名</p>
+        <div>
+            <input class="form-control w-100 mt-1" name="tane" required>
+        </div>
+        <p class="mt-3">採取年月日</p>
+        <div>
+            <input type="date" class="form-control w-100 mt-1" name="saisyu" placeholder=""" >
+        </div>
+        <p class="mt-3">ラベル番号</p>
+        <div>
+            <input class="form-control w-100 mt-1" name="raberu" value="-" >
+        </div>
+        <p class="mt-3">取り出したボンベ</p>
+        <div>
+            <select class="form-control w-100 mt-1" name="bonbe" value="-">
+                <option value="-">-</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+             
+            </select>
+        <p class="mt-3">取り出したキャニスター</p>
+        <div>
+            <select class="form-control w-100 mt-1" name="kyani" value="-">
+                <option value="-">-</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+             
+            </select>
+        <p class="mt-3">区分</p>
+        <div>
+            <select class="form-control w-100 mt-1" name="kubun" >
+                <option value="自家授精">自家授精</option>
+                <option value="譲渡">譲渡</option>
+                <option value="利用">利用</option>
+                <option value="他">他</option>
+
+
+             
+      
+        </div>
+    
+      
+        <input type="submit" class="mt-4 btn btn-primary" value="送信">
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            const liffId = "**************************************";
+            initializeLiff(liffId);
+        })
+
+        function initializeLiff(liffId) {
+            liff.init({
+                liffId: liffId
+            }).then(() => {
+                initializeApp();
+            }).catch((err) => {
+                console.log('LIFF Initialization failed ', err);
+            });
+        }
+
+        function sendText(text) {
+            liff.sendMessages([{
+                'type': 'text',
+                'text': text
+            }]).then(function () {
+                liff.closeWindow();
+            }).catch(function (error) {
+                window.alert('Failed to send message ' + error);
+            });
+        }
+
+        const params = (new URL(document.location)).searchParams;
+        const key = params.get('key');
+
+        $(function () {
+            $('form').submit(function () {
+                const day    = $('input[name="day"]').val();
+                const no10= $('input[name="no10"]').val();
+                const tane  = $('input[name="tane"]').val();
+                const saisyu  = $('input[name="saisyu"]').val();
+                const raberu = $('input[name="raberu"]').val();
+                const bonbe = $('select[name="bonbe"]').val();
+                const kyani = $('select[name="kyani"]').val();
+                const kubun = $('input[name="kubun"]').val();
+                const msg = `********\n${day}\n${no10}\n${tane}\n${saisyu}\n${raberu}\n${bonbe}\n${kyani}\n${kubun}`;
+                sendText(msg);
+                return false;
+            });
+        });
+
+    </script>
+
+</body>
+</html>
